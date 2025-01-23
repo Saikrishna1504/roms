@@ -4,217 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom ROM Downloads</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1E1E1E;
-            --primary: #BB86FC;
-            --secondary: #03DAC6;
-            --text: #FFFFFF;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .device-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .device-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-            text-align: center;
-        }
-
-        .device-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .device-image {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-        }
-
-        .device-name {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .codename {
-            color: var(--secondary);
-            font-size: 1rem;
-        }
-
-        .rom-section {
-            display: none;
-            margin-top: 2rem;
-        }
-
-        .rom-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .rom-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-        }
-
-        .rom-info h2 {
-            color: var(--primary);
-        }
-
-        .rom-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .download-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .download-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            background: var(--primary);
-            color: black;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.2s;
-        }
-
-        .download-button:hover {
-            opacity: 0.9;
-        }
-
-        .mirror {
-            background: var(--secondary);
-        }
-
-        .changelog-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        @media (max-width: 600px) {
-            .changelog-buttons {
-                flex-direction: column;
-            }
-        }
-
-        .donation {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--primary);
-            color: black;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .donation:hover {
-            transform: scale(1.1);
-        }
-
-        .back-button {
-            background: var(--secondary);
-            color: black;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .about-me {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .about-me img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-
-        .about-me a {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <header>
             <div class="about-me">
-                <img src="pfp.jpg" alt="Profile Picture">
+                <img src="images/pfp.jpg" alt="Profile Picture">
                 <a href="https://github.com/saikrishna1504" target="_blank">Saikrishna1504</a>
             </div>
         </header>
         <div id="device-select">
             <div class="device-grid">
                 <div class="device-card" onclick="showROM('begonia')">
-                    <img src="begonia.png" alt="Redmi Note 8 Pro" class="device-image">
+                    <img src="images/begonia.png" alt="Redmi Note 8 Pro" class="device-image">
                     <h2 class="device-name">Redmi Note 8 Pro</h2>
                     <p class="codename">(begonia)</p>
                 </div>
                 <div class="device-card" onclick="showROM('duchamp')">
-                    <img src="duchamp.png" alt="POCO X6 Pro" class="device-image">
+                    <img src="images/duchamp.png" alt="POCO X6 Pro" class="device-image">
                     <h2 class="device-name">POCO X6 Pro</h2>
                     <p class="codename">(duchamp)</p>
                 </div>
@@ -224,7 +34,7 @@
         <div id="begonia-rom" class="rom-section">
             <a href="#" class="back-button" onclick="showDevices()">← Back to Devices</a>
             <div class="rom-header">
-                <img src="kernel.jpg" alt="Kernel Logo" class="rom-logo">
+                <img src="images/kernel.jpg" alt="Kernel Logo" class="rom-logo">
                 <div class="rom-info">
                     <h2>PoWeR Kernel</h2>
                     <p>Last updated: 15-01-2025</p>
@@ -252,7 +62,7 @@
                 </div>
             </div>
             <div class="rom-header">
-                <img src="vos.png" alt="ROM Logo" class="rom-logo">
+                <img src="images/vos.png" alt="ROM Logo" class="rom-logo">
                 <div class="rom-info">
                     <h2>Voltage OS for Redmi Note 8 Pro</h2>
                     <p>Last updated: 08-12-2024</p>
@@ -304,7 +114,7 @@
         <div id="duchamp-rom" class="rom-section">
             <a href="#" class="back-button" onclick="showDevices()">← Back to Devices</a>
             <div class="rom-header">
-                <img src="vos.png" alt="ROM Logo" class="rom-logo">
+                <img src="images/vos.png" alt="ROM Logo" class="rom-logo">
                 <div class="rom-info">
                     <h2>Voltage OS for Poco X6 Pro</h2>
                     <p>Last updated: 12-01-2025</p>
@@ -357,20 +167,5 @@
     <a href="https://github.com/sponsors/Saikrishna1504" class="donation">
         <i class="fas fa-heart"></i>
     </a>
-
-    <script>
-        function showROM(device) {
-            document.getElementById('device-select').style.display = 'none';
-            document.getElementById('begonia-rom').style.display = 'none';
-            document.getElementById('duchamp-rom').style.display = 'none';
-            document.getElementById(`${device}-rom`).style.display = 'block';
-        }
-
-        function showDevices() {
-            document.getElementById('device-select').style.display = 'block';
-            document.getElementById('begonia-rom').style.display = 'none';
-            document.getElementById('duchamp-rom').style.display = 'none';
-        }
-    </script>
 </body>
 </html>

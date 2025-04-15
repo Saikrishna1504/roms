@@ -1,77 +1,102 @@
 // When the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Check for low-performance devices
-    const isLowPerformanceDevice = checkLowPerformanceDevice();
+    // Make content visible immediately
+    document.body.style.opacity = '1';
     
-    // Initialize particles only for high-performance devices
-    if (!isLowPerformanceDevice) {
-        initializeParticles();
+    // Show device cards instantly
+    const deviceCards = document.querySelectorAll('.device-card');
+    deviceCards.forEach((card) => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+    });
+    
+    // Basic hover effects for desktop only
+    if (!isMobile()) {
+        deviceCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.background = 'var(--card-bg)';
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Basic hover for ROM cards on desktop
+        const romCards = document.querySelectorAll('.rom-card');
+        romCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
     }
+});
+
+// Simple mobile detection
+function isMobile() {
+    return window.innerWidth <= 768 || 
+           navigator.userAgent.match(/Android/i) ||
+           navigator.userAgent.match(/webOS/i) ||
+           navigator.userAgent.match(/iPhone/i) ||
+           navigator.userAgent.match(/iPad/i) ||
+           navigator.userAgent.match(/iPod/i) ||
+           navigator.userAgent.match(/BlackBerry/i) ||
+           navigator.userAgent.match(/Windows Phone/i);
+}
+
+// Show ROM section without animations
+function showROM(device) {
+    // Hide device selection
+    const deviceSelect = document.getElementById('device-select');
+    deviceSelect.style.display = 'none';
     
-    // Add mouse trail effect on device cards (only for non-mobile devices)
+    // Hide all ROM sections first
+    document.getElementById('begonia-rom').style.display = 'none';
+    document.getElementById('duchamp-rom').style.display = 'none';
+    
+    // Show selected ROM section
+    const selectedRom = document.getElementById(`${device}-rom`);
+    selectedRom.style.display = 'block';
+    selectedRom.style.opacity = '1';
+    
+    // Make all ROM cards visible immediately
+    const romCards = selectedRom.querySelectorAll('.rom-card');
+    romCards.forEach(card => {
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+    });
+    
+    // Instant scroll to top
+    window.scrollTo(0, 0);
+}
+
+// Show device selection without animations
+function showDevices() {
+    // Hide ROM sections
+    document.getElementById('begonia-rom').style.display = 'none';
+    document.getElementById('duchamp-rom').style.display = 'none';
+    
+    // Show device selection
+    const deviceSelect = document.getElementById('device-select');
+    deviceSelect.style.display = 'block';
+    deviceSelect.style.opacity = '1';
+    
+    // Make all device cards visible immediately
     const deviceCards = document.querySelectorAll('.device-card');
     deviceCards.forEach(card => {
-        // Skip hover effects on low performance devices
-        if (!isLowPerformanceDevice && !isMobile()) {
-            card.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                this.style.background = `
-                    radial-gradient(circle at ${x}px ${y}px, 
-                    rgba(40, 50, 80, 0.8) 0%, 
-                    var(--card-bg) 50%)
-                `;
-            });
-        }
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.background = 'var(--card-bg)';
-            this.style.transform = 'translateY(0)';
-        });
-        
-        card.addEventListener('mouseenter', function() {
-            const transform = isLowPerformanceDevice ? 'translateY(-5px)' : 'translateY(-8px) scale(1.02)';
-            this.style.transform = transform;
-        });
+        card.classList.remove('fade-out');
+        card.style.opacity = '1';
+        card.style.transform = 'none';
     });
     
-    // Add ripple effect to buttons
-    const buttons = document.querySelectorAll('.download-button, .back-button');
-    buttons.forEach(button => {
-        button.addEventListener('click', createRipple);
-    });
-    
-    // Add hover effects to ROM cards
-    const romCards = document.querySelectorAll('.rom-card');
-    romCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
-    
-    // Initialize with a fade-in effect
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-        
-        // Stagger animation for device cards
-        const deviceCards = document.querySelectorAll('.device-card');
-        deviceCards.forEach((card, index) => {
-            setTimeout(() => {
-                card.style.transform = 'translateY(0)';
-                card.style.opacity = '1';
-            }, isLowPerformanceDevice ? 50 : (100 + (index * 150)));
-        });
-    }, 100);
-    
-    // Remove scroll event listener for falling elements to improve performance
-    // We're not going to create falling elements on scroll anymore
-});
+    // Instant scroll to top
+    window.scrollTo(0, 0);
+}
 
 // Check if the device is likely a low-performance Android device
 function checkLowPerformanceDevice() {
@@ -96,17 +121,6 @@ function checkLowPerformanceDevice() {
     }
     
     return false;
-}
-
-function isMobile() {
-    return window.innerWidth <= 768 || 
-           navigator.userAgent.match(/Android/i) ||
-           navigator.userAgent.match(/webOS/i) ||
-           navigator.userAgent.match(/iPhone/i) ||
-           navigator.userAgent.match(/iPad/i) ||
-           navigator.userAgent.match(/iPod/i) ||
-           navigator.userAgent.match(/BlackBerry/i) ||
-           navigator.userAgent.match(/Windows Phone/i);
 }
 
 // Create ripple effect on buttons
@@ -328,7 +342,6 @@ function scrollToTop() {
         behavior: checkLowPerformanceDevice() ? 'auto' : 'smooth'
     });
 }
-
 // Enhance the original functions to include scroll to top
 const originalShowROM = showROM;
 showROM = function(device) {

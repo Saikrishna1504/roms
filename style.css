@@ -30,7 +30,7 @@ body {
     color: var(--text);
     min-height: 100vh;
     line-height: 1.6;
-    opacity: 0;
+    opacity: 1 !important;
     transition: opacity 0.5s ease;
     position: relative;
     overflow-x: hidden;
@@ -63,6 +63,7 @@ body::before {
     z-index: -1;
     animation: float 15s infinite ease-in-out;
     filter: blur(5px);
+    display: none !important;
 }
 
 @keyframes float {
@@ -93,6 +94,7 @@ body::before {
     transform: scale(0);
     animation: ripple 0.6s linear;
     pointer-events: none;
+    display: none !important;
 }
 
 @keyframes ripple {
@@ -104,7 +106,7 @@ body::before {
 
 /* Device card animations */
 .device-card {
-    opacity: 0;
+    opacity: 1 !important;
     transform: translateY(20px);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
 }
@@ -115,6 +117,7 @@ body::before {
 }
 
 .rom-card {
+    opacity: 1 !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
                 box-shadow 0.3s ease, 
                 opacity 0.5s ease;
@@ -840,4 +843,9 @@ header {
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
     }
+}
+
+/* Performance optimization for all devices */
+.falling-star, .falling-leaf, .ripple {
+    display: none !important;
 }

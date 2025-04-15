@@ -1,23 +1,30 @@
 // When the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize particles background
-    initializeParticles();
+    // Check for low-performance devices
+    const isLowPerformanceDevice = checkLowPerformanceDevice();
     
-    // Add mouse trail effect on device cards
+    // Initialize particles only for high-performance devices
+    if (!isLowPerformanceDevice) {
+        initializeParticles();
+    }
+    
+    // Add mouse trail effect on device cards (only for non-mobile devices)
     const deviceCards = document.querySelectorAll('.device-card');
     deviceCards.forEach(card => {
-        card.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // Create the glow effect following the cursor
-            this.style.background = `
-                radial-gradient(circle at ${x}px ${y}px, 
-                rgba(40, 50, 80, 0.8) 0%, 
-                var(--card-bg) 50%)
-            `;
-        });
+        // Skip hover effects on low performance devices
+        if (!isLowPerformanceDevice && !isMobile()) {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                this.style.background = `
+                    radial-gradient(circle at ${x}px ${y}px, 
+                    rgba(40, 50, 80, 0.8) 0%, 
+                    var(--card-bg) 50%)
+                `;
+            });
+        }
         
         card.addEventListener('mouseleave', function() {
             this.style.background = 'var(--card-bg)';
@@ -25,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
+            const transform = isLowPerformanceDevice ? 'translateY(-5px)' : 'translateY(-8px) scale(1.02)';
+            this.style.transform = transform;
         });
     });
     
@@ -57,48 +65,68 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 card.style.transform = 'translateY(0)';
                 card.style.opacity = '1';
-            }, 100 + (index * 150));
+            }, isLowPerformanceDevice ? 50 : (100 + (index * 150)));
         });
     }, 100);
     
-    let scrollTimer;
-    let lastScrollTop = 0;
-    window.addEventListener('scroll', function() {
-        clearTimeout(scrollTimer);
-        
-        const st = window.pageYOffset || document.documentElement.scrollTop;
-        if (Math.abs(lastScrollTop - st) > 50) {
-            createFallingElements(isMobile() ? 2 : 3);
-            lastScrollTop = st;
-        }
-        
-        scrollTimer = setTimeout(() => {
-            if (Math.random() > 0.5) {
-                createFallingElements(isMobile() ? 1 : 2);
-            }
-        }, 200);
-    }, { passive: true });
+    // Remove scroll event listener for falling elements to improve performance
+    // We're not going to create falling elements on scroll anymore
 });
 
+// Check if the device is likely a low-performance Android device
+function checkLowPerformanceDevice() {
+    const ua = navigator.userAgent.toLowerCase();
+    const isAndroid = ua.indexOf('android') > -1;
+    const isMobileDevice = isMobile();
+    
+    // Check for Android device with low memory or processor indicators
+    // This is a simplistic check, you might want to refine it
+    if (isAndroid && isMobileDevice) {
+        return true;
+    }
+    
+    // Check for low memory conditions
+    if (navigator.deviceMemory && navigator.deviceMemory <= 4) {
+        return true;
+    }
+    
+    // Check for older browsers that typically run on older hardware
+    if (typeof window.requestAnimationFrame !== 'function') {
+        return true;
+    }
+    
+    return false;
+}
+
 function isMobile() {
-    return window.innerWidth <= 768;
+    return window.innerWidth <= 768 || 
+           navigator.userAgent.match(/Android/i) ||
+           navigator.userAgent.match(/webOS/i) ||
+           navigator.userAgent.match(/iPhone/i) ||
+           navigator.userAgent.match(/iPad/i) ||
+           navigator.userAgent.match(/iPod/i) ||
+           navigator.userAgent.match(/BlackBerry/i) ||
+           navigator.userAgent.match(/Windows Phone/i);
 }
 
 // Create ripple effect on buttons
 function createRipple(event) {
+    // Check if we should skip fancy effects for performance
+    if (checkLowPerformanceDevice()) {
+        return;
+    }
+    
     const button = event.currentTarget;
     
     const circle = document.createElement('span');
     const diameter = Math.max(button.clientWidth, button.clientHeight);
     const radius = diameter / 2;
     
-    // Position the ripple
     circle.style.width = circle.style.height = `${diameter}px`;
     circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
     circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
     circle.classList.add('ripple');
     
-    // Remove existing ripples
     const ripple = button.querySelector('.ripple');
     if (ripple) {
         ripple.remove();
@@ -106,7 +134,6 @@ function createRipple(event) {
     
     button.appendChild(circle);
     
-    // Remove the ripple after animation
     setTimeout(() => {
         circle.remove();
     }, 600);
@@ -114,8 +141,11 @@ function createRipple(event) {
 
 // Initialize floating particles background
 function initializeParticles() {
-    const isMobile = window.innerWidth <= 768;
-    const particleCount = isMobile ? 6 : 10;
+    // Skip particles on low-performance devices
+    if (checkLowPerformanceDevice()) return;
+    
+    const isMobileDevice = isMobile();
+    const particleCount = isMobileDevice ? 4 : 10;
     
     // Check if container exists, create it if not
     let container = document.querySelector('.particles-container');
@@ -139,17 +169,18 @@ function initializeParticles() {
         const particle = document.createElement('div');
         particle.className = 'particle';
         
-        // Randomize particle size between 3 and 13 pixels for better variety
-        const size = 3 + Math.random() * 10;
+        // Reduced particle size for better performance
+        const size = isMobileDevice ? 
+            (2 + Math.random() * 6) : 
+            (3 + Math.random() * 10);
         
-        // Position particles across window width and at different heights
         const posX = Math.random() * window.innerWidth;
         const posY = 100 + Math.random() * window.innerHeight;
         
-        // Longer animation durations for slower, more peaceful movement
-        const duration = isMobile ? 
-            15 + Math.random() * 8 : 
-            12 + Math.random() * 10;
+        // Simplified animation for better performance
+        const duration = isMobileDevice ? 
+            (20 + Math.random() * 10) : 
+            (15 + Math.random() * 10);
             
         const delay = Math.random() * 5;
         
@@ -160,109 +191,28 @@ function initializeParticles() {
         particle.style.animationDuration = `${duration}s`;
         particle.style.animationDelay = `${delay}s`;
         
-        // Adjust opacity and colors for better visibility and aesthetics
-        const opacity = 0.1 + Math.random() * 0.3; // Slightly less opaque for subtle effect
-        const hue = Math.random() > 0.5 ? 
-            250 + Math.random() * 50 :  // Blues/purples
-            170 + Math.random() * 30;   // Teals/cyans
-        const saturation = 60 + Math.random() * 40;
-        const lightness = 50 + Math.random() * 30;
+        // Lower opacity for less visual intensity
+        const opacity = 0.05 + Math.random() * 0.15;
+        const hue = Math.random() > 0.5 ? 250 : 170;
+        const saturation = 60;
+        const lightness = 50;
         
         particle.style.backgroundColor = `hsla(${hue}, ${saturation}%, ${lightness}%, ${opacity})`;
         
-        // Apply slightly different shadow effects to some particles
-        if (Math.random() > 0.7) {
-            particle.style.boxShadow = `0 0 ${Math.floor(size/2)}px hsla(${hue}, ${saturation}%, ${lightness}%, 0.8)`;
-        }
-        
+        // Remove box shadow for better performance
         container.appendChild(particle);
     }
-    
-    // Reinitialize particles on window resize with debounce
-    window.addEventListener('resize', debounce(() => {
-        initializeParticles();
-    }, 250));
 }
 
-// Debounce helper function to prevent multiple executions
-function debounce(func, wait) {
-    let timeout;
-    return function() {
-        const context = this;
-        const args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(context, args), wait);
-    };
-}
-
-function createFallingElements(count) {
-    const isMobile = window.innerWidth <= 768;
-    // Higher threshold for creating elements (less frequent)
-    
-    const container = document.querySelector('body');
-    const elementsToCreate = count || (isMobile ? 1 : 2);
-    
-    for (let i = 0; i < elementsToCreate; i++) {
-        setTimeout(() => {
-            // Create a falling star
-            if (Math.random() > 0.6) {
-                const star = document.createElement('div');
-                star.className = 'falling-star';
-                
-                const posX = Math.random() * window.innerWidth;
-                star.style.left = `${posX}px`;
-                star.style.top = '0';
-                
-                // Slower animation duration for stars
-                const duration = isMobile ? 
-                    Math.floor(Math.random() * 4) + 8 : 
-                    Math.floor(Math.random() * 3) + 6;
-                    
-                star.style.animationDuration = `${duration}s`;
-                
-                container.appendChild(star);
-                
-                // Remove element after animation completes
-                setTimeout(() => {
-                    star.remove();
-                }, duration * 1000);
-            } 
-            // Create a falling leaf
-            else {
-                const leaf = document.createElement('div');
-                leaf.className = 'falling-leaf';
-                
-                const posX = Math.random() * window.innerWidth;
-                const size = 5 + Math.random() * 5;  // Slightly smaller for better performance
-                
-                const baseHue = Math.random() > 0.5 ? '40, 100%, 50%' : '120, 60%, 70%';
-                leaf.style.backgroundColor = `hsl(${baseHue})`;
-                
-                leaf.style.left = `${posX}px`;
-                leaf.style.top = '0';
-                leaf.style.width = `${size}px`;
-                leaf.style.height = `${size}px`;
-                
-                // Slower animation for leaves
-                const fallingDuration = isMobile ? 
-                    Math.floor(Math.random() * 5) + 10 : 
-                    Math.floor(Math.random() * 4) + 8;
-                    
-                leaf.style.animationDuration = `${fallingDuration}s, 8s`;
-                
-                container.appendChild(leaf);
-                
-                // Remove element after animation completes
-                setTimeout(() => {
-                    leaf.remove();
-                }, fallingDuration * 1000);
-            }
-        }, i * 400); // Increased delay between elements
-    }
+// This function is not used anymore to improve performance
+function createFallingElements() {
+    // Function disabled to improve performance
 }
 
 // Show the selected ROM section with animation
 function showROM(device) {
+    const isLowPerf = checkLowPerformanceDevice();
+    
     // Add active class for animation
     document.querySelectorAll('.device-card').forEach(card => {
         card.classList.add('fade-out');
@@ -273,8 +223,9 @@ function showROM(device) {
     deviceSelect.style.opacity = '0';
     deviceSelect.style.transform = 'translateY(-20px)';
     
-    createFallingElements(isMobile() ? 3 : 5);
+    // No falling elements for better performance
     
+    const transitionTime = isLowPerf ? 100 : 300;
     setTimeout(() => {
         deviceSelect.style.display = 'none';
         
@@ -305,20 +256,22 @@ function showROM(device) {
                 setTimeout(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
-                }, 100 + (index * 100));
+                }, isLowPerf ? 50 : (100 + (index * 100)));
             });
-        }, 50);
-    }, 300);
+        }, isLowPerf ? 25 : 50);
+    }, transitionTime);
 }
 
 // Show device selection with animation
 function showDevices() {
+    const isLowPerf = checkLowPerformanceDevice();
+    
     // Fade out current ROM section
     const begoniaRom = document.getElementById('begonia-rom');
     const duchampRom = document.getElementById('duchamp-rom');
     const deviceSelect = document.getElementById('device-select');
     
-    createFallingElements(isMobile() ? 3 : 5);
+    // No falling elements for better performance
     
     if (begoniaRom.style.display === 'block') {
         begoniaRom.style.opacity = '0';
@@ -330,6 +283,7 @@ function showDevices() {
         duchampRom.style.transform = 'translateY(-20px)';
     }
     
+    const transitionTime = isLowPerf ? 100 : 300;
     setTimeout(() => {
         // Hide ROM sections
         begoniaRom.style.display = 'none';
@@ -361,17 +315,17 @@ function showDevices() {
                 setTimeout(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
-                }, 100 + (index * 150));
+                }, isLowPerf ? 50 : (100 + (index * 150)));
             });
-        }, 50);
-    }, 300);
+        }, isLowPerf ? 25 : 50);
+    }, transitionTime);
 }
 
 // Add a smooth scroll-to-top when changing sections
 function scrollToTop() {
     window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: checkLowPerformanceDevice() ? 'auto' : 'smooth'
     });
 }
 

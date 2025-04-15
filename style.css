@@ -800,87 +800,44 @@ header {
 }
 
 /* Add falling stars/leaves animation */
-.falling-star {
-    position: fixed;
-    width: 2px;
-    height: 2px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8),
-                0 0 20px 10px var(--primary);
-    opacity: 0;
-    pointer-events: none;
-    z-index: -1;
-    animation: fallingAnimation 3s linear;
+.falling-star, .falling-leaf {
+    display: none; /* Disable animations to improve performance */
 }
 
-.falling-leaf {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background: linear-gradient(135deg, var(--accent-secondary), var(--primary));
-    opacity: 0;
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    pointer-events: none;
-    z-index: -1;
-    animation: leafFalling 5s linear, leafRotation 3s infinite ease-in-out alternate;
-    filter: blur(1px);
-}
-
-@keyframes fallingAnimation {
-    0% {
-        transform: translate(0, 0) rotate(0deg) scale(0.3);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    80% {
-        opacity: 0.6;
-    }
-    100% {
-        transform: translate(50px, 100vh) rotate(45deg) scale(0.1);
-        opacity: 0;
-    }
-}
-
-@keyframes leafFalling {
-    0% {
-        transform: translate(0, -20px) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.7;
-    }
-    90% {
-        opacity: 0.5;
-    }
-    100% {
-        transform: translate(50px, 100vh) rotate(360deg);
-        opacity: 0;
-    }
-}
-
-@keyframes leafRotation {
-    0% {
-        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    }
-    50% {
-        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
-    }
-    100% {
-        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    }
-}
-
-/* Optimize for mobile devices */
+/* Mobile optimizations */
 @media (max-width: 768px) {
-    .falling-star {
-        box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.7),
-                    0 0 10px 5px var(--primary);
+    /* Reduce animation complexity for mobile */
+    .particle {
+        animation: simplified-float 20s infinite ease-in-out;
+        filter: blur(2px); /* Less blur for better performance */
     }
     
-    .falling-leaf {
-        filter: blur(0.5px);
+    @keyframes simplified-float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+    
+    /* Reduce animation effects */
+    .rom-card {
+        transition: transform 0.3s ease, opacity 0.4s ease;
+    }
+    
+    .rom-logo, .about-me img {
+        animation: none; /* Disable pulse animation */
+    }
+    
+    /* Lighten shadows for better performance */
+    .device-card, .rom-card, .back-button, .download-button {
+        box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Reduce backdrop filter intensity */
+    .device-card, .rom-card, .social-links {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
     }
 }

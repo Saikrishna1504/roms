@@ -3,29 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Download custom ROMs for your Android devices">
+    <!-- Prevent mobile browsers from rendering delays -->
+    <meta name="theme-color" content="#0b0f1a">
     <title>Custom ROM Downloads</title>
+    <!-- Preload critical assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <!-- Defer non-critical scripts -->
     <script defer src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <div class="container">
         <header>
             <div class="about-me">
-                <img src="images/pfp.gif" alt="Profile Picture">
+                <img src="images/pfp.jpg" alt="Profile Picture" width="60" height="60">
                 <a href="https://github.com/saikrishna1504" target="_blank">Saikrishna1504</a>
             </div>
         </header>
         <div id="device-select">
             <div class="device-grid">
                 <div class="device-card" onclick="showROM('begonia')">
-                    <img src="images/begonia.png" alt="Redmi Note 8 Pro" class="device-image">
+                    <img src="images/begonia.png" alt="Redmi Note 8 Pro" class="device-image" loading="lazy" width="180">
                     <h2 class="device-name">Redmi Note 8 Pro</h2>
                     <p class="codename">(begonia)</p>
                 </div>
                 <div class="device-card" onclick="showROM('duchamp')">
-                    <img src="images/duchamp.png" alt="POCO X6 Pro" class="device-image">
+                    <img src="images/duchamp.png" alt="POCO X6 Pro" class="device-image" loading="lazy" width="180">
                     <h2 class="device-name">POCO X6 Pro</h2>
                     <p class="codename">(duchamp)</p>
                 </div>
@@ -33,13 +41,13 @@
             <div class="social-links">
                 <div class="telegram-links">
                     <div class="telegram-profile-card">
-                        <img src="images/support.jpg" alt="Profile 1" class="telegram-profile">
+                        <img src="images/support.jpg" alt="Support Group" class="telegram-profile" width="40" height="40">
                         <div class="telegram-info">
                             <a href="https://t.me/sai26918" target="_blank" class="telegram-support">Support Group</a>
                         </div>
                     </div>
                     <div class="telegram-profile-card">
-                        <img src="images/channel.jpg" alt="Profile 2" class="telegram-profile">
+                        <img src="images/channel.jpg" alt="Updates Channel" class="telegram-profile" width="40" height="40">
                         <div class="telegram-info">
                             <a href="https://t.me/sai_hub" target="_blank" class="telegram-channel">Updates Channel</a>
                         </div>
@@ -51,7 +59,7 @@
         <div id="begonia-rom" class="rom-section">
             <a href="#" class="back-button" onclick="showDevices()"><i class="fas fa-chevron-left"></i> Back to Devices</a>
             <div class="rom-header">
-                <img src="images/kernel.jpg" alt="Kernel Logo" class="rom-logo">
+                <img src="images/kernel.jpg" alt="Kernel Logo" class="rom-logo" width="80" height="80">
                 <div class="rom-info">
                     <h2>PoWeR Kernel</h2>
                     <p><i class="fas fa-clock"></i> Last updated: 15-01-2025</p>
@@ -79,7 +87,7 @@
                 </div>
             </div>
             <div class="rom-header">
-                <img src="images/axion.jpg" alt="ROM Logo" class="rom-logo">
+                <img src="images/axion.jpg" alt="ROM Logo" class="rom-logo" width="80" height="80">
                 <div class="rom-info">
                     <h2>Axion OS</h2>
                     <p><i class="fas fa-clock"></i> Last updated: 26-02-2025</p>
@@ -172,7 +180,7 @@
                 </div>                
             </div>
             <div class="rom-header">
-                <img src="images/vos.png" alt="ROM Logo" class="rom-logo">
+                <img src="images/vos.png" alt="ROM Logo" class="rom-logo" width="80" height="80">
                 <div class="rom-info">
                     <h2>Voltage OS</h2>
                     <p><i class="fas fa-clock"></i> Last updated: 17-02-2025</p>
@@ -280,7 +288,7 @@
         <div id="duchamp-rom" class="rom-section">
             <a href="#" class="back-button" onclick="showDevices()"><i class="fas fa-chevron-left"></i> Back to Devices</a>
             <div class="rom-header">
-                <img src="images/cr.jpg" alt="ROM Logo" class="rom-logo">
+                <img src="images/cr.jpg" alt="ROM Logo" class="rom-logo" width="80" height="80">
                 <div class="rom-info">
                     <h2>crDroid</h2>
                     <p><i class="fas fa-clock"></i> Last updated: 13-04-2025</p>
@@ -345,7 +353,7 @@
                 </div>  
             </div>
             <div class="rom-header">
-                <img src="images/vos.png" alt="ROM Logo" class="rom-logo">
+                <img src="images/vos.png" alt="ROM Logo" class="rom-logo" width="80" height="80">
                 <div class="rom-info">
                     <h2>Voltage OS</h2>
                     <p><i class="fas fa-clock"></i> Last updated: 22-02-2025</p>
@@ -454,5 +462,10 @@
     <a href="https://github.com/sponsors/Saikrishna1504" class="donation">
         <i class="fas fa-heart"></i>
     </a>
+
+    <!-- Add a small button to scroll back to top -->
+    <button id="scroll-top" onclick="scrollToTop()" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; background: rgba(30, 41, 59, 0.8); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 </body>
 </html>

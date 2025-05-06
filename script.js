@@ -178,11 +178,21 @@ function showDevices() {
     }, transitionTime);
 }
 
-// Smooth scroll to top function with performance check
+// Function to show/hide scroll-to-top button
+window.onscroll = function() {
+    const scrollTopBtn = document.getElementById("scroll-top");
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        scrollTopBtn.style.display = "flex";
+    } else {
+        scrollTopBtn.style.display = "none";
+    }
+};
+
+// Scroll to top function
 function scrollToTop() {
     window.scrollTo({
         top: 0,
-        behavior: checkLowPerformanceDevice() ? 'auto' : 'smooth'
+        behavior: "smooth"
     });
 }
 

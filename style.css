@@ -693,6 +693,7 @@ header {
     width: 40px;
     height: 40px;
     cursor: pointer;
+    display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -755,4 +756,50 @@ header {
 #device-select.fade-out {
     opacity: 0;
     transform: translateY(-10px);
+}
+
+/* Floating heart donation button */
+.donation {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 99;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform var(--animation-speed-fast) ease, background var(--animation-speed-fast) ease;
+    text-decoration: none;
+    animation: pulse 2s infinite;
+    will-change: transform;
+}
+
+.donation:hover {
+    transform: translateY(-5px) scale(1.05);
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+}
+
+.donation .fas {
+    font-size: 1.2rem;
+}
+
+/* Add mobile support for donation button */
+@media (max-width: 768px) {
+    .donation {
+        width: 45px;
+        height: 45px;
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .donation .fas {
+        font-size: 1.1rem;
+    }
 }
